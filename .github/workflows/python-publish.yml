@@ -52,7 +52,7 @@ jobs:
       - name: Bump version if upload failed
         if: steps.publish.outcome == 'failure'
         run: |
-          python3 bump_version.py
+          python3 scripts/bump_version.py
           git config --local user.email "${{ secrets.GITHUB_EMAIL }}"
           git config --local user.name "${{ secrets.GITHUB_USER }}"
           git commit -m "Bump version"
