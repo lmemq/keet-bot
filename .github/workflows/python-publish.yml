@@ -37,6 +37,7 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - uses: actions/checkout@v4  # Повторно используем checkout для доступа ко всем файлам
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4
         with:
@@ -49,16 +50,20 @@ jobs:
         run: |
           twine upload dist/*
 
-      - name: Check current directory
+      - name: Check for bump_version.py
         run: |
-          pwd
-          ls -R
+          if [ -f bump_version.py ]; then
+            echo "bump_version.py found."
+          else
+            echo "bump_version.py not found."
+            exit 1
+          fi
 
       - name: Bump version if upload failed
         if: steps.publish.outcome == 'failure'
         run: |
-          python3 scripts/bump_version.py
-          git config --local user.email "${{ secrets.GITHUB_EMAIL }}"
-          git config --local user.name "${{ secrets.GITHUB_USER }}"
+          python3 bump_version.py
+          git config --local user.email "${{ secrets.EMAIL }}"
+          git config --local user.name "${{ secrets.USER }}"
           git commit -m "Bump version"
           git push
