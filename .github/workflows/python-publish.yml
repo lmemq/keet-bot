@@ -37,7 +37,6 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4  # Повторно используем checkout для доступа ко всем файлам
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4
         with:
@@ -45,25 +44,6 @@ jobs:
           path: dist/
 
       - name: Publish release distributions to PyPI
-        id: publish
-        continue-on-error: true
-        run: |
-          twine upload dist/*
-
-      - name: Check for bump_version.py
-        run: |
-          if [ -f bump_version.py ]; then
-            echo "bump_version.py found."
-          else
-            echo "bump_version.py not found."
-            exit 1
-          fi
-
-      - name: Bump version if upload failed
-        if: steps.publish.outcome == 'failure'
-        run: |
-          python3 bump_version.py
-          git config --local user.email "${{ secrets.EMAIL }}"
-          git config --local user.name "${{ secrets.USER }}"
-          git commit -m "Bump version"
-          git push
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
