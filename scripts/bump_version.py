@@ -24,4 +24,4 @@ def update_version_in_file(file_path):
         sys.exit(1)
 
 if __name__ == "__main__":
-    update_version_in_file('setup.cfg')
+    update_version_in_file('../setup.cfg')
