@@ -49,6 +49,11 @@ jobs:
         run: |
           twine upload dist/*
 
+      - name: Check current directory
+        run: |
+          pwd
+          ls -R
+
       - name: Bump version if upload failed
         if: steps.publish.outcome == 'failure'
         run: |
