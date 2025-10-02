@@ -1,3 +1,4 @@
+# Lib is not work now, because I havent an api access
 # Keetbot
 **Keetbot** is a very simple python library for making your [keet messenger](https://keet.io/) bots 
 ### Installing
